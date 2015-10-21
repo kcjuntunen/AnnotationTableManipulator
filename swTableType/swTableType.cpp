@@ -88,7 +88,6 @@ namespace swTableType {
 		if (!parts->ContainsKey(p->PartNumber)) {
 			parts->Add(p->PartNumber, p);
 		}
-		System::Diagnostics::Debug::Print(p->PartNumber);
 	}
 
 	string^ swTableType::get_property_by_part(string^ part, string^ prop, string^ part_column_name) {

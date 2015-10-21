@@ -56,12 +56,15 @@ namespace swTableTypeTest
 		void TestMethod1()
 		{
 			swTableType::swTableType ^ tt = gcnew swTableType::swTableType();
-			//String^ s = String::Empty;
-			//for (int i = 0; i < tt->parts->Count; i++) {
-			//	s += tt->parts->Values->ToString();
+			String^ s = String::Empty;
+			for each (System::Collections::Generic::KeyValuePair<String^, Part^> p in tt->parts) {
+				s += String::Format("{0}: {1}", p.Key, p.Value);
+			}
+			for (int i = 0; i < tt->parts->Count; i++) {
+				s += tt->parts->Values->ToString();
 
-			//}
-			//System::Windows::Forms::MessageBox::Show(s);
+			}
+			System::Windows::Forms::MessageBox::Show(s);
 		};
 	};
 }
