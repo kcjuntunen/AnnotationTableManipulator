@@ -6,6 +6,7 @@
 namespace swTableType {
 	swTableType::swTableType() {
 		swApp = gcnew SldWorksClass;
+
 		if (!swApp)
 			got_sw = false;
 		else
@@ -41,6 +42,7 @@ namespace swTableType {
 
 		col_count = swTable->RowCount;
 		row_count = swTable->ColumnCount;
+		parts = gcnew System::Collections::Generic::Dictionary<string^, Part^>(row_count);
 
 		part_table = gcnew array<string^, 2>(col_count, row_count);
 		if (swTable) {
@@ -93,7 +95,7 @@ namespace swTableType {
 	string^ swTableType::get_property_by_part(string^ part, string^ prop, string^ part_column_name) {
 		int prtcol = get_column_by_name(part_column_name);
 		int prpcol = get_column_by_name(prop);
-		string^ res = string::Empty;
+		string^ res = "null";
 
 		for (int i = 0; i < RowCount; i++) {
 			if (part_table[prtcol, i]->Trim()->ToUpper()->Equals(prop->ToUpper())) {
@@ -106,7 +108,7 @@ namespace swTableType {
 	string^ swTableType::get_property_by_part(int row, string^ prop, string^ part_column_name) {
 		int prtcol = get_column_by_name(part_column_name);
 		int prpcol = get_column_by_name(prop);
-		string^ res = string::Empty;
+		string^ res = "null";
 
 		for (int i = 0; i < RowCount; i++) {
 			if (part_table[prtcol, i]->Trim()->ToUpper()->Equals(prop->ToUpper())) {
