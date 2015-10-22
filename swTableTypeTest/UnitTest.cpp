@@ -47,13 +47,49 @@ namespace swTableTypeTest {
     //void MyTestCleanup() {};
     //
 #pragma endregion 
+    [TestMethod]
+    void TestGetParts() {
+      swTableType::swTableType^ tt = gcnew swTableType::swTableType();
+      System::Collections::Generic::List<String ^>^ slt;
+      slt = tt->GetParts();
+
+      System::Diagnostics::Debug::Assert(slt != nullptr);
+    }
 
     [TestMethod]
-    void TestMethod1() {
-      swTableType::swTableType ^ tt = gcnew swTableType::swTableType();
-      String^ s = tt->parts["KARW1305-02-01"]->Description;
+    void TestColumnNotExist() {
+      swTableType::swTableType^ tt = gcnew swTableType::swTableType();
+      String^ s = tt->GetProperty("KOFX1502-05-02", "QQQ");
+      System::Diagnostics::Debug::Assert(s == String::Empty);
+    }
 
-      System::Windows::Forms::MessageBox::Show(s);
+    [TestMethod]
+    void TestRowNotExist() {
+      swTableType::swTableType^ tt = gcnew swTableType::swTableType();
+      String^ s = tt->GetProperty("QQQ", "MATID");
+      System::Diagnostics::Debug::Assert(s == String::Empty);
+    }
+
+    [TestMethod]
+    void TestLoop() {
+      swTableType::swTableType^ tt = gcnew swTableType::swTableType();
+      String^ s = String::Empty;
+      for each (String^ x in tt->GetParts()) {
+        s = tt->GetProperty(x, "MATID");
+      }
+
+      System::Diagnostics::Debug::Print(s);
+      System::Diagnostics::Debug::Assert(s == "1271");
     };
+
+    [TestMethod]
+    void TestDirect() {
+      swTableType::swTableType^ tt = gcnew swTableType::swTableType();
+      String^ s = String::Empty;
+      s = tt->GetProperty("KOFX1502-05-03", "DescriptION");
+
+      System::Diagnostics::Debug::Print(s);
+      System::Diagnostics::Debug::Assert(s == "PLATE");
+    }
   };
 }

@@ -31,8 +31,10 @@ private:
     bool res = T::TryParse(input, tp);
     return tp;
   }
+
 public:
   Part();
+  static int PartCount = 0;
   void SetQuantity(string^ qty);
   void SetMaterialID(string^ id);
   void SetLength(string^ len);
@@ -48,8 +50,7 @@ public:
   void SetDeptID(string^ id);
   void SetUpdateCNC(string^ tf);
   void SetOpID(string^ id, int opNo);
-
-
+  string^ str();
 
   property string^ PartNumber {
     string^ get() {

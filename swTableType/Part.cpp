@@ -4,6 +4,7 @@
 
 Part::Part() {
   opid = gcnew array<int>(5);
+  PartCount++;
 }
 
 void Part::SetQuantity(string^ qty) {
@@ -68,4 +69,9 @@ void Part::SetUpdateCNC(string^ tf) {
 
 void Part::SetOpID(string^ id, int opNo) {
   opid[opNo] = parse<int>(id);
+}
+
+string^ Part::str() {
+  return string::Format("PartNumber: {0}\nDescription: {1}\nQTY.: {2}\nMATID: {3}\nL: {4}\nW: {5}\nT: {6}\nBLANKQTY: {7}\nOVERL: {8}\nOVERW: {9}\nCNC1: {10}\nCNC2: {11}", 
+    PartNumber, Description, Qty, MaterialID, Length, Width, Thickness, BlankQty, OverL, OverW, CNC1, CNC2);
 }

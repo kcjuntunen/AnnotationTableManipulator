@@ -19,6 +19,8 @@ namespace swTableType {
   typedef SolidWorks::Interop::sldworks::IBomTableAnnotation IBomTableAnnotation;
   typedef SolidWorks::Interop::sldworks::IBomFeature IBomFeature;
   typedef System::Collections::Generic::Dictionary<string^, Part^>  Parts;
+  typedef System::Security::Cryptography::MD5 MD5;
+  typedef System::Byte byte;
 
   public ref class swTableType {
   private:
@@ -41,14 +43,16 @@ namespace swTableType {
     string^ get_property_by_part(string^ part, string^ prop, string^ part_column_name);
     string^ get_property_by_part(int row, string^ prop, string^ part_column_name);
 
-    string^ get_cell_contents(int col, int row) { return part_table[col, row]; }
-    string^ get_column_heading(int col) { return part_table[col, 0]; }
+    string^ get_cell_contents(int col, int row) { return swTable->DisplayedText[col, row]; }
+    string^ get_column_heading(int col) { return swTable->DisplayedText[col, 0]; }
     void set_part_column(string^ name) { part_column = name; }
     void set_include_column(string^ name) { inc_column = name; }
 
-    string^ get_property(string^ part, string^ prop);
-    string^ get_property(int row, string^ prop);
     int get_column_by_name(string^ prop);
+    int get_row_by_partname(string^ prt);
+
+    void traverse_tables();
+    bool identify_table(ITableAnnotation^ table, string^ tablehash);
 
     property int ColumnCount {
       int get() { return col_count; }
@@ -63,5 +67,9 @@ namespace swTableType {
 
     swTableType();
     ~swTableType();
+
+    string^ GetProperty(string^ part, string^ prop);
+    string^ GetProperty(int row, string^ prop);
+    string_list_type^ GetParts();
   };
 }
