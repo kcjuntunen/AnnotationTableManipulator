@@ -91,5 +91,21 @@ namespace swTableTypeTest {
       System::Diagnostics::Debug::Print(s);
       System::Diagnostics::Debug::Assert(s == "PLATE");
     }
+
+    [TestMethod]
+    void TestGetPart() {
+      swTableType::swTableType^ tt = gcnew swTableType::swTableType();
+      Part^ p = tt->GetPart("KOFX1502-05-02");
+      System::Diagnostics::Debug::Assert(p->Length == 3.254);
+      System::Diagnostics::Debug::Assert(p->OpID[1] == 32);
+    }
+
+    [TestMethod]
+    void TestGetPartNoSuchPart() {
+      // Checking for no exceptions.
+      swTableType::swTableType^ tt = gcnew swTableType::swTableType();
+      Part^ p = tt->GetPart("QQQQQQ");
+      System::Diagnostics::Debug::Assert(p->Length == 0.0f);
+    }
   };
 }
