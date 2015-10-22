@@ -129,7 +129,7 @@ namespace swTableType {
   }
 
   void swTableType::find_bom() {
-    SolidWorks::Interop::sldworks::Feature^ f = (SolidWorks::Interop::sldworks::Feature^)part->FirstFeature();
+    bool found = false;
     IFeature^ feature = (IFeature^)part->FirstFeature();
     if (got_sw && part != nullptr) {
       while (feature != nullptr) {
@@ -139,13 +139,16 @@ namespace swTableType {
           fill_table(bom);
           // TODO: This hardcoding is gonna have to go eventually.
           if (identify_table(swTable, "82-AA-F9-AB-4F-B6-22-7C-D6-47-9A-A5-51-7A-59-08")) {
+            found = true;
             break;
           }
         }
         feature = (IFeature^)feature->GetNextFeature();
       }
     }
-    throw gcnew System::NullReferenceException("I can't find a table anywhere.");
+    if (!found) {
+      throw gcnew System::NullReferenceException("I can't find a table anywhere.");
+    }
   }
 
   bool swTableType::identify_table(ITableAnnotation^ table, string^ tablehash) {
