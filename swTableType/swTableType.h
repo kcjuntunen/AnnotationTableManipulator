@@ -27,13 +27,13 @@ namespace swTableType {
   private:
     bool got_sw;
     SelectionMgr^ swSelMgr;
-    TableAnnotation^ swTableAnn;
+    //TableAnnotation^ swTableAnn;
     ITableAnnotation^ swTable;
     IModelDoc2^ part;
-    string_list_type slt;
+    //string_list_type slt;
     string^ part_column = "PART";
     string^ inc_column = "INCLUDE IN CUTLIST";
-    array<string^, 2>^ part_table;
+    //array<string^, 2>^ part_table;
 
     int row_count = 0;
     int col_count = 0;
@@ -51,6 +51,7 @@ namespace swTableType {
 
     int get_column_by_name(string^ prop);
     int get_row_by_partname(string^ prt);
+    Part^ return_part(int prt);
 
     void find_bom();
     bool identify_table(ITableAnnotation^ table, string^ tablehash);

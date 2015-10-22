@@ -44,16 +44,6 @@ namespace swTableType {
 
     col_count = swTable->ColumnCount;
     row_count = swTable->RowCount;
-    //parts = gcnew System::Collections::Generic::Dictionary<string^, Part^>(row_count);
-
-    //part_table = gcnew array<string^, 2>(row_count, col_count);
-    //if (swTable) {
-    //  for (int i = 0; i < row_count; i++) {
-    //    for (int j = 0; j < col_count; j++) {
-    //      part_table[i, j] = swTable->DisplayedText[i, j];
-    //    }
-    //  }
-    //}
   }
 
   void swTableType::insert_parts() {
@@ -63,40 +53,14 @@ namespace swTableType {
   }
 
   void swTableType::insert_part(int prt) {
-    Part^ p = gcnew Part();
-    p->PartNumber = GetProperty(prt, "PART");
-    p->Description = GetProperty(prt, "DESCRIPTION");
-    p->SetQuantity(GetProperty(prt, "QTY."));
-    p->SetMaterialID(GetProperty(prt, "MATID"));
-    p->SetLength(GetProperty(prt, "L"));
-    p->SetWidth(GetProperty(prt, "W"));
-    p->SetThickness(GetProperty(prt, "T"));
-    p->SetBlankQty(GetProperty(prt, "BLANK QTY"));
-    p->SetOverL(GetProperty(prt, "OVERL"));
-    p->SetOverW(GetProperty(prt, "OVERW"));
-    p->CNC1 = GetProperty(prt, "CNC1");
-    p->CNC2 = GetProperty(prt, "CNC2");
-    string^ op = string::Empty;
-    for (int i = 0; i < 5; i++) {
-      op = string::Format("OP{0}ID", i + 1);
-      p->SetOpID(GetProperty(prt, op), i);
-    }
+    Part^ p = return_part(prt);
 
-    p->SetEdgeFrontID(GetProperty(prt, "EFID"));
-    p->SetEdgeBackID(GetProperty(prt, "EBID"));
-    p->SetEdgeLeftID(GetProperty(prt, "ELID"));
-    p->SetEdgeRightID(GetProperty(prt, "ERID"));
-    p->Comment = GetProperty(prt, "COMMENT");
-    p->SetDeptID(GetProperty(prt, "DEPT"));
-    p->SetUpdateCNC(GetProperty(prt, "UPDATE_CNC"));
-
-    parts->Add(p->PartNumber, p);
     if (!parts->ContainsKey(p->PartNumber)) {
       parts->Add(p->PartNumber, p);
     }
   }
 
-  Part^ return_part(int row) {
+  Part^ swTableType::return_part(int prt) {
     Part^ p = gcnew Part();
     p->PartNumber = GetProperty(prt, "PART");
     p->Description = GetProperty(prt, "DESCRIPTION");
@@ -165,7 +129,7 @@ namespace swTableType {
           feature->Select2(false, -1);
           IBomFeature^ bom = (IBomFeature^)swSelMgr->GetSelectedObject6(1, -1);
           fill_table(bom);
-          // This hardcoding is gonna have to go eventually.
+          // TODO: This hardcoding is gonna have to go eventually.
           if (identify_table(swTable, "82-AA-F9-AB-4F-B6-22-7C-D6-47-9A-A5-51-7A-59-08")) {
             break;
           }
@@ -183,7 +147,7 @@ namespace swTableType {
     System::IO::Stream^ columns = gcnew System::IO::MemoryStream();
     columns->Write(System::Text::Encoding::UTF8->GetBytes(str), 0, str->Length - 1);
     
-    string^ hash = System::BitConverter::ToString(MD5::Create()->ComputeHash(ToByteArray(str)));
+    string^ hash = System::BitConverter::ToString(MD5::Create()->ComputeHash(to_byte_array(str)));
     return hash == tablehash;
   }
 
@@ -212,5 +176,14 @@ namespace swTableType {
       slt->Add(swTable->DisplayedText[i, prtcol]->ToString());
     }
     return slt;
+  }
+
+  Part^ swTableType::GetPart(string^ prt) {
+    int prtrow = get_row_by_partname(prt);
+    return return_part(prtrow);
+  }
+
+  Part^ swTableType::GetPart(int row) {
+    return return_part(row);
   }
 }
