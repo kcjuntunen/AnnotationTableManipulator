@@ -69,6 +69,7 @@ namespace swTableType {
     Parts^ parts;
 
     swTableType();
+    swTableType(IModelDoc2^ md);
     ~swTableType();
     Part^ GetPart(string^ part);
     Part^ GetPart(int row);

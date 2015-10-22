@@ -21,15 +21,25 @@ namespace swTableType {
         IBomFeature^ swBom = (IBomFeature^)swSelMgr->GetSelectedObject6(1, -1);
         if (swBom != nullptr) {
           fill_table(swBom);
-          //insert_parts();
         }
         else {
           find_bom();
-
-          /*int butn = (int)SolidWorks::Interop::swconst::swMessageBoxBtn_e::swMbOk;
-          int icon = (int)SolidWorks::Interop::swconst::swMessageBoxIcon_e::swMbStop;
-          swApp->SendMsgToUser2("Must select a Bom.", icon, butn);*/
         }
+      }
+    }
+  }
+
+  swTableType::swTableType(IModelDoc2^ md) {
+    part = md;
+    swSelMgr = part->ISelectionManager;
+    find_bom();
+    if (part != nullptr && swSelMgr != nullptr) {
+      IBomFeature^ swBom = (IBomFeature^)swSelMgr->GetSelectedObject6(1, -1);
+      if (swBom != nullptr) {
+        fill_table(swBom);
+      }
+      else {
+        find_bom();
       }
     }
   }
@@ -137,6 +147,7 @@ namespace swTableType {
         feature = (IFeature^)feature->GetNextFeature();
       }
     }
+    throw gcnew System::NullReferenceException("I can't find a table anywhere.");
   }
 
   bool swTableType::identify_table(ITableAnnotation^ table, string^ tablehash) {
