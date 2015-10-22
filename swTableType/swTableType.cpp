@@ -16,7 +16,7 @@ namespace swTableType {
       swApp->Visible = true;
       part = swApp->IActiveDoc2;
       swSelMgr = part->ISelectionManager;
-
+      find_bom();
       if (part != nullptr && swSelMgr != nullptr) {
         IBomFeature^ swBom = (IBomFeature^)swSelMgr->GetSelectedObject6(1, -1);
         if (swBom != nullptr) {
@@ -24,9 +24,11 @@ namespace swTableType {
           //insert_parts();
         }
         else {
-          int butn = (int)SolidWorks::Interop::swconst::swMessageBoxBtn_e::swMbOk;
+          find_bom();
+
+          /*int butn = (int)SolidWorks::Interop::swconst::swMessageBoxBtn_e::swMbOk;
           int icon = (int)SolidWorks::Interop::swconst::swMessageBoxIcon_e::swMbStop;
-          swApp->SendMsgToUser2("Must select a Bom.", icon, butn);
+          swApp->SendMsgToUser2("Must select a Bom.", icon, butn);*/
         }
       }
     }
@@ -94,6 +96,36 @@ namespace swTableType {
     }
   }
 
+  Part^ return_part(int row) {
+    Part^ p = gcnew Part();
+    p->PartNumber = GetProperty(prt, "PART");
+    p->Description = GetProperty(prt, "DESCRIPTION");
+    p->SetQuantity(GetProperty(prt, "QTY."));
+    p->SetMaterialID(GetProperty(prt, "MATID"));
+    p->SetLength(GetProperty(prt, "L"));
+    p->SetWidth(GetProperty(prt, "W"));
+    p->SetThickness(GetProperty(prt, "T"));
+    p->SetBlankQty(GetProperty(prt, "BLANK QTY"));
+    p->SetOverL(GetProperty(prt, "OVERL"));
+    p->SetOverW(GetProperty(prt, "OVERW"));
+    p->CNC1 = GetProperty(prt, "CNC1");
+    p->CNC2 = GetProperty(prt, "CNC2");
+    string^ op = string::Empty;
+    for (int i = 0; i < 5; i++) {
+      op = string::Format("OP{0}ID", i + 1);
+      p->SetOpID(GetProperty(prt, op), i);
+    }
+
+    p->SetEdgeFrontID(GetProperty(prt, "EFID"));
+    p->SetEdgeBackID(GetProperty(prt, "EBID"));
+    p->SetEdgeLeftID(GetProperty(prt, "ELID"));
+    p->SetEdgeRightID(GetProperty(prt, "ERID"));
+    p->Comment = GetProperty(prt, "COMMENT");
+    p->SetDeptID(GetProperty(prt, "DEPT"));
+    p->SetUpdateCNC(GetProperty(prt, "UPDATE_CNC"));
+    return p;
+  }
+
   string^ swTableType::get_property_by_part(string^ prt, string^ prop, string^ part_column_name) {
     int prtrow = get_row_by_partname(prt);
     int prpcol = get_column_by_name(prop);
@@ -124,8 +156,23 @@ namespace swTableType {
     return 0;
   }
 
-  void swTableType::traverse_tables() {
-
+  void swTableType::find_bom() {
+    SolidWorks::Interop::sldworks::Feature^ f = (SolidWorks::Interop::sldworks::Feature^)part->FirstFeature();
+    IFeature^ feature = (IFeature^)part->FirstFeature();
+    if (got_sw && part != nullptr) {
+      while (feature != nullptr) {
+        if (feature->GetTypeName2()->ToUpper() == "BOMFEAT") {
+          feature->Select2(false, -1);
+          IBomFeature^ bom = (IBomFeature^)swSelMgr->GetSelectedObject6(1, -1);
+          fill_table(bom);
+          // This hardcoding is gonna have to go eventually.
+          if (identify_table(swTable, "82-AA-F9-AB-4F-B6-22-7C-D6-47-9A-A5-51-7A-59-08")) {
+            break;
+          }
+        }
+        feature = (IFeature^)feature->GetNextFeature();
+      }
+    }
   }
 
   bool swTableType::identify_table(ITableAnnotation^ table, string^ tablehash) {
@@ -134,11 +181,20 @@ namespace swTableType {
       str += string::Format("{0}|", table->DisplayedText[0, i]->ToUpper());
     }
     System::IO::Stream^ columns = gcnew System::IO::MemoryStream();
-
     columns->Write(System::Text::Encoding::UTF8->GetBytes(str), 0, str->Length - 1);
-    string^ hash = System::BitConverter::ToString(MD5::Create()->ComputeHash(columns));
-
+    
+    string^ hash = System::BitConverter::ToString(MD5::Create()->ComputeHash(ToByteArray(str)));
     return hash == tablehash;
+  }
+
+  array<byte>^ swTableType::to_byte_array(string^ s) {
+    array<byte>^ ba = gcnew array<byte>(s->Length);
+    int count = 0;
+    for each (char c in s) {
+      ba[count] = s[count];
+      count++;
+    }
+    return ba;
   }
 
   string^ swTableType::GetProperty(string^ part, string^ prop) {

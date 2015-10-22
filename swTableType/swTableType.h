@@ -15,6 +15,7 @@ namespace swTableType {
   typedef SolidWorks::Interop::sldworks::SldWorksClass SldWorksClass;
   typedef SolidWorks::Interop::sldworks::ISldWorks ISldWorks;
   typedef SolidWorks::Interop::sldworks::ITableAnnotation ITableAnnotation;
+  typedef SolidWorks::Interop::sldworks::IFeature IFeature;
   typedef System::Collections::Generic::List<ITableAnnotation^> ita_list_type;
   typedef SolidWorks::Interop::sldworks::IBomTableAnnotation IBomTableAnnotation;
   typedef SolidWorks::Interop::sldworks::IBomFeature IBomFeature;
@@ -51,8 +52,9 @@ namespace swTableType {
     int get_column_by_name(string^ prop);
     int get_row_by_partname(string^ prt);
 
-    void traverse_tables();
+    void find_bom();
     bool identify_table(ITableAnnotation^ table, string^ tablehash);
+    array<byte>^ swTableType::to_byte_array(string^ s);
 
     property int ColumnCount {
       int get() { return col_count; }
@@ -67,7 +69,8 @@ namespace swTableType {
 
     swTableType();
     ~swTableType();
-
+    Part^ GetPart(string^ part);
+    Part^ GetPart(int row);
     string^ GetProperty(string^ part, string^ prop);
     string^ GetProperty(int row, string^ prop);
     string_list_type^ GetParts();
