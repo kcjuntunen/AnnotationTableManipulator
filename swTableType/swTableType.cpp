@@ -6,6 +6,8 @@
 namespace swTableType {
   swTableType::swTableType() {
     swApp = gcnew SldWorksClass;
+    cols = gcnew string_list_type();
+    prts = gcnew string_list_type();
 
     if (!swApp)
       got_sw = false;
@@ -29,6 +31,8 @@ namespace swTableType {
   }
 
   swTableType::swTableType(IModelDoc2^ md) {
+    cols = gcnew string_list_type();
+    prts = gcnew string_list_type();
     part = md;
     swSelMgr = part->ISelectionManager;
     if (part != nullptr && swSelMgr != nullptr) {
@@ -47,11 +51,22 @@ namespace swTableType {
   }
 
   void swTableType::fill_table(IBomFeature^ bom) {
+    cols->Clear();
+    prts->Clear();
     swTable = (ITableAnnotation^)bom->IGetTableAnnotations(1);
     part->ClearSelection2(true);
 
     col_count = swTable->ColumnCount;
     row_count = swTable->RowCount;
+    for (int i = 0; i < col_count; i++) {
+      cols->Add(swTable->DisplayedText[0, i]);
+    }
+
+    int prtcol = get_column_by_name(part_column);
+    for (int i = 0; i < row_count; i++) {
+      prts->Add(swTable->DisplayedText[i, prtcol]);
+    }
+    initialated = true;
   }
 
   void swTableType::insert_parts() {
@@ -110,22 +125,38 @@ namespace swTableType {
   }
 
   int swTableType::get_column_by_name(string^ prop) {
-    for (int i = 0; i < col_count; i++) {
-      if (swTable->DisplayedText[0, i]->Trim()->ToUpper()->Equals(prop->ToUpper())) {
-        return i;
+    if (!initialated) {
+      for (int i = 0; i < col_count; i++) {
+        if (swTable->DisplayedText[0, i]->Trim()->ToUpper()->Equals(prop->ToUpper())) {
+          return i;
+        }
       }
     }
-    return 0;
+    else {
+      int count = 0;
+      for each (string^ s in cols) {
+        if (s->ToUpper()->Trim()->Equals(prop->ToUpper()->Trim())) {
+          return count;
+        }
+        count++;
+      }
+      return 0xffffffff;
+    }
   }
 
   int swTableType::get_row_by_partname(string^ prt) {
-    int prtcol = get_column_by_name(part_column);
-    for (int i = 0; i < row_count; i++) {
-      if (swTable->DisplayedText[i, prtcol]->Trim()->ToUpper()->Equals(prt->Trim()->ToUpper())) {
-        return i;
+    if (!initialated) {
+      int prtcol = get_column_by_name(part_column);
+      for (int i = 0; i < row_count; i++) {
+        if (swTable->DisplayedText[i, prtcol]->Trim()->ToUpper()->Equals(prt->Trim()->ToUpper())) {
+          return i;
+        }
       }
     }
-    return 0;
+    else {
+      return prts->IndexOf(prt);
+    }
+
   }
 
   void swTableType::find_bom() {
@@ -138,7 +169,7 @@ namespace swTableType {
           IBomFeature^ bom = (IBomFeature^)swSelMgr->GetSelectedObject6(1, -1);
           fill_table(bom);
           // TODO: This hardcoding is gonna have to go eventually.
-          if (identify_table(swTable, "82-AA-F9-AB-4F-B6-22-7C-D6-47-9A-A5-51-7A-59-08")) {
+          if (identify_table(cols, "3D-C6-2B-6E-5B-D9-78-5D-DB-61-6F-78-6F-D8-B3-43")) {
             found = true;
             break;
           }
@@ -151,11 +182,15 @@ namespace swTableType {
     }
   }
 
-  bool swTableType::identify_table(ITableAnnotation^ table, string^ tablehash) {
+  bool swTableType::identify_table(string_list_type^ table, string^ tablehash) {
     string^ str = string::Empty;
-    for (int i = 0; i < col_count; i++) {
-      str += string::Format("{0}|", table->DisplayedText[0, i]->ToUpper());
+    array<string^>^ ss = gcnew array<string^>(table->Count);
+    table->CopyTo(ss);
+    System::Array::Sort(ss);
+    for each (string^ s in ss) {
+      str += string::Format("{0}|", s->ToUpper());
     }
+
     System::IO::Stream^ columns = gcnew System::IO::MemoryStream();
     columns->Write(System::Text::Encoding::UTF8->GetBytes(str), 0, str->Length - 1);
     
@@ -181,13 +216,20 @@ namespace swTableType {
     return get_property_by_part(row, prop, part_column);
   }
 
-  string_list_type^ swTableType::GetParts() {
-    int prtcol = get_column_by_name(part_column);
+  string_list_type^ swTableType::GetPartList() {
     string_list_type^ slt = gcnew string_list_type();
     for (int i = 1; i < row_count; i++) {
-      slt->Add(swTable->DisplayedText[i, prtcol]->ToString());
+      slt->Add(prts[i]);
     }
     return slt;
+  }
+
+  Parts^ swTableType::GetParts() {
+    parts = gcnew Parts();
+    for each (string^ s in GetPartList()) {
+      parts->Add(s, GetPart(s));
+    }
+    return parts;
   }
 
   Part^ swTableType::GetPart(string^ prt) {

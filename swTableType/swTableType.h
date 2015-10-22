@@ -34,10 +34,11 @@ namespace swTableType {
     string^ part_column = "PART";
     string^ inc_column = "INCLUDE IN CUTLIST";
     //array<string^, 2>^ part_table;
-
+    string_list_type^ cols;
+    string_list_type^ prts;
     int row_count = 0;
     int col_count = 0;
-
+    bool initialated = false;
     void fill_table(IBomFeature^ bom);
     void insert_part(int prt);
     void insert_parts();
@@ -54,8 +55,8 @@ namespace swTableType {
     Part^ return_part(int prt);
 
     void find_bom();
-    bool identify_table(ITableAnnotation^ table, string^ tablehash);
-    array<byte>^ swTableType::to_byte_array(string^ s);
+    bool identify_table(string_list_type^ table, string^ tablehash);
+    static array<byte>^ swTableType::to_byte_array(string^ s);
 
     property int ColumnCount {
       int get() { return col_count; }
@@ -64,9 +65,10 @@ namespace swTableType {
     property int RowCount {
       int get() { return row_count; }
     }
-  public:
-    ISldWorks^ swApp;
+
     Parts^ parts;
+    ISldWorks^ swApp;
+  public:
 
     swTableType();
     swTableType(IModelDoc2^ md);
@@ -75,6 +77,17 @@ namespace swTableType {
     Part^ GetPart(int row);
     string^ GetProperty(string^ part, string^ prop);
     string^ GetProperty(int row, string^ prop);
-    string_list_type^ GetParts();
+    string_list_type^ GetPartList();
+    Parts^ GetParts();
+
+    property ISldWorks^ SldWorksApp {
+      ISldWorks^ get() {
+        return swApp;
+      }
+
+      void set(ISldWorks^ value) {
+        swApp = value;
+      }
+    }
   };
 }

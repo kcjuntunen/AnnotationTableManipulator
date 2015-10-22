@@ -48,12 +48,21 @@ namespace swTableTypeTest {
     //
 #pragma endregion 
     [TestMethod]
-    void TestGetParts() {
+    void TestGetPartList() {
       swTableType::swTableType^ tt = gcnew swTableType::swTableType();
       System::Collections::Generic::List<String ^>^ slt;
-      slt = tt->GetParts();
+      slt = tt->GetPartList();
 
       System::Diagnostics::Debug::Assert(slt != nullptr);
+    }
+
+    [TestMethod]
+    void TestGetParts() {
+      swTableType::swTableType^ tt = gcnew swTableType::swTableType();
+      System::Collections::Generic::Dictionary<String ^, Part^ >^ pp;
+      pp = tt->GetParts();
+
+      System::Diagnostics::Debug::Assert(pp != nullptr);
     }
 
     [TestMethod]
@@ -74,7 +83,7 @@ namespace swTableTypeTest {
     void TestLoop() {
       swTableType::swTableType^ tt = gcnew swTableType::swTableType();
       String^ s = String::Empty;
-      for each (String^ x in tt->GetParts()) {
+      for each (String^ x in tt->GetPartList()) {
         s = tt->GetProperty(x, "MATID");
       }
 
@@ -96,8 +105,10 @@ namespace swTableTypeTest {
     void TestGetPart() {
       swTableType::swTableType^ tt = gcnew swTableType::swTableType();
       Part^ p = tt->GetPart("KOFX1502-05-02");
-      System::Diagnostics::Debug::Assert(p->Length == 3.254);
-      System::Diagnostics::Debug::Assert(p->OpID[1] == 32);
+      double l = p->Length;
+      System::Diagnostics::Debug::Assert(System::Math::Abs(l - 3.254) < .0005);
+      int i = p->OpID[1];
+      System::Diagnostics::Debug::Assert(i == 32);
     }
 
     [TestMethod]
