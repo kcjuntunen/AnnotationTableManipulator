@@ -16,7 +16,6 @@ namespace swTableType {
       swApp->Visible = true;
       part = swApp->IActiveDoc2;
       swSelMgr = part->ISelectionManager;
-      find_bom();
       if (part != nullptr && swSelMgr != nullptr) {
         IBomFeature^ swBom = (IBomFeature^)swSelMgr->GetSelectedObject6(1, -1);
         if (swBom != nullptr) {
@@ -32,7 +31,6 @@ namespace swTableType {
   swTableType::swTableType(IModelDoc2^ md) {
     part = md;
     swSelMgr = part->ISelectionManager;
-    find_bom();
     if (part != nullptr && swSelMgr != nullptr) {
       IBomFeature^ swBom = (IBomFeature^)swSelMgr->GetSelectedObject6(1, -1);
       if (swBom != nullptr) {
