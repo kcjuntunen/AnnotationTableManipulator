@@ -31,6 +31,7 @@ namespace swTableType {
   }
 
   swTableType::swTableType(IModelDoc2^ md) {
+    got_sw = true; // Well, not really.
     cols = gcnew string_list_type();
     prts = gcnew string_list_type();
     part = md;
