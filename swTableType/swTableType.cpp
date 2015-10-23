@@ -140,8 +140,8 @@ namespace swTableType {
         }
         count++;
       }
-      return 0xffffffff;
     }
+    return 0xffffffff;
   }
 
   int swTableType::get_row_by_partname(string^ prt) {
@@ -153,10 +153,7 @@ namespace swTableType {
         }
       }
     }
-    else {
-      return prts->IndexOf(prt);
-    }
-
+    return prts->IndexOf(prt);
   }
 
   void swTableType::find_bom() {
