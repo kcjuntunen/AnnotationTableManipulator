@@ -2,28 +2,33 @@
 #using <mscorlib.dll>
 
 typedef System::String string;
+typedef System::IO::FileInfo fileinfo;
+
 public ref class Part {
 private:
+  unsigned int id;
   string^ part_number = string::Empty;
   string^ description = string::Empty;
-  int quantity = 1;
-  int matid = 2929;
+  unsigned short quantity = 1;
+  unsigned int matid = 2929;
   double l = 0.0f;
   double w = 0.0f;
   double t = 0.0f;
-  int blank_qty = 0;
+  unsigned short blank_qty = 0;
   double overl = 0.0f;
   double overw = 0.0f;
   string^ cnc1 = string::Empty;
   string^ cnc2 = string::Empty;
-  array<int>^ opid;
-  int efid = 0;
-  int ebid = 0;
-  int elid = 0;
-  int erid = 0;
+  array<short int>^ opid;
+  unsigned int efid = 0;
+  unsigned int ebid = 0;
+  unsigned int elid = 0;
+  unsigned int erid = 0;
   string^ comment = string::Empty;
-  int deptid = 1;
+  unsigned short deptid = 1;
   bool update_cnc = false;
+  unsigned int hash;
+  fileinfo^ fi;
 
   template<typename T>
   T parse(string^ input) {
@@ -72,14 +77,14 @@ public:
     }
   }
 
-  property int Qty {
-    int get() {
+  property unsigned short Qty {
+    unsigned short get() {
       return quantity;
     }
   }
 
-  property int MaterialID {
-    int get() {
+  property unsigned int MaterialID {
+    unsigned int get() {
       return matid;
     }
   }
@@ -102,8 +107,8 @@ public:
     }
   }
 
-  property int BlankQty {
-    int get() {
+  property unsigned short BlankQty {
+    unsigned short get() {
       return blank_qty;
     }
   }
@@ -140,8 +145,8 @@ public:
     }
   }
 
-  property int OpID[int] {
-    int get(int ndx) {
+  property unsigned short OpID[int] {
+    unsigned short get(unsigned short ndx) {
       if (ndx > 0 && ndx < 6)
         return opid[ndx];
       else
@@ -149,26 +154,26 @@ public:
     }
   }
 
-  property int EdgeFrontID {
-    int get() {
+  property unsigned int EdgeFrontID {
+    unsigned int get() {
       return efid;
     }
   }
 
-  property int EdgeBackID {
-    int get() {
+  property unsigned int EdgeBackID {
+    unsigned int get() {
       return ebid;
     }
   }
 
-  property int EdgeLeftID {
-    int get() {
+  property unsigned int EdgeLeftID {
+    unsigned int get() {
       return elid;
     }
   }
 
-  property int EdgeRightID {
-    int get() {
+  property unsigned int EdgeRightID {
+    unsigned int get() {
       return erid;
     }
   }
@@ -183,8 +188,8 @@ public:
     }
   }
 
-  property int DepartmentID {
-    int get() {
+  property unsigned short DepartmentID {
+    unsigned short get() {
       return deptid;
     }
   }
@@ -193,6 +198,37 @@ public:
     bool get() {
       return update_cnc;
     }
+  }
+
+  property unsigned int Hash {
+    unsigned int get() {
+      return hash;
+    }
+    void set(unsigned int value) {
+      hash = value;
+    }
+  }
+
+  property string^ FileName {
+    string^ get() {
+      return fi->Name->Split(' ', '.')[0];
+    }
+  }
+
+  property string^ FullPath {
+    string^ get() {
+      return string::Format("{0}\\{1}", fi->Directory->FullName, FileName);
+    }
+  }
+
+  property fileinfo^ FileInformation {
+    fileinfo^ get() {
+      return fi;
+    }
+    void set(fileinfo^ value) {
+      fi = value;
+    }
+
   }
 };
 

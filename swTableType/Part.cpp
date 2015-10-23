@@ -3,7 +3,7 @@
 
 
 Part::Part() {
-  opid = gcnew array<int>(5);
+  opid = gcnew array<short int>(5);
   PartCount++;
 }
 
@@ -32,7 +32,7 @@ void Part::SetThickness(string^ thk) {
 }
 
 void Part::SetBlankQty(string^ qty) {
-  blank_qty = parse<int>(qty);
+  blank_qty = parse<unsigned short>(qty);
 }
 
 void Part::SetOverL(string^ over) {
@@ -44,23 +44,23 @@ void Part::SetOverW(string^ over) {
 }
 
 void Part::SetEdgeFrontID(string^ id) {
-  efid = parse<int>(id);
+  efid = parse<unsigned int>(id);
 }
 
 void Part::SetEdgeBackID(string^ id) {
-  ebid = parse<int>(id);
+  ebid = parse<unsigned int>(id);
 }
 
 void Part::SetEdgeLeftID(string^ id) {
-  elid = parse<int>(id);
+  elid = parse<unsigned int>(id);
 }
 
 void Part::SetEdgeRightID(string^ id) {
-  erid = parse<int>(id);
+  erid = parse<unsigned int>(id);
 }
 
 void Part::SetDeptID(string^ id) {
-  deptid = parse<int>(id);
+  deptid = parse<unsigned short>(id);
 }
 
 void Part::SetUpdateCNC(string^ tf) {
@@ -68,7 +68,7 @@ void Part::SetUpdateCNC(string^ tf) {
 }
 
 void Part::SetOpID(string^ id, int opNo) {
-  opid[opNo] = parse<int>(id);
+  opid[opNo] = parse<unsigned short>(id);
 }
 
 string^ Part::str() {
