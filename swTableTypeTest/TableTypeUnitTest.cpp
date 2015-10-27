@@ -47,76 +47,76 @@ namespace swTableTypeTest {
     //void MyTestCleanup() {};
     //
 #pragma endregion 
-    [TestMethod]
-    void TestGetPartList() {
-      swTableType::swTableType^ tt = gcnew swTableType::swTableType();
-      System::Collections::Generic::List<String ^>^ slt;
-      slt = tt->GetPartList();
+    //[TestMethod]
+    //void TestGetPartList() {
+    //  swTableType::swTableType^ tt = gcnew swTableType::swTableType();
+    //  System::Collections::Generic::List<String ^>^ slt;
+    //  slt = tt->GetPartList();
 
-      System::Diagnostics::Debug::Assert(slt != nullptr);
-    }
+    //  System::Diagnostics::Debug::Assert(slt != nullptr);
+    //}
 
-    [TestMethod]
-    void TestGetParts() {
-      swTableType::swTableType^ tt = gcnew swTableType::swTableType();
-      System::Collections::Generic::Dictionary<String ^, Part^ >^ pp;
-      pp = tt->GetParts();
+    //[TestMethod]
+    //void TestGetParts() {
+    //  swTableType::swTableType^ tt = gcnew swTableType::swTableType();
+    //  System::Collections::Generic::Dictionary<String ^, Part^ >^ pp;
+    //  pp = tt->GetParts();
 
-      System::Diagnostics::Debug::Assert(pp != nullptr);
-    }
+    //  System::Diagnostics::Debug::Assert(pp != nullptr);
+    //}
 
-    [TestMethod]
-    void TestColumnNotExist() {
-      swTableType::swTableType^ tt = gcnew swTableType::swTableType();
-      String^ s = tt->GetProperty("KOFX1502-05-02", "QQQ");
-      System::Diagnostics::Debug::Assert(s == String::Empty);
-    }
+    //[TestMethod]
+    //void TestColumnNotExist() {
+    //  swTableType::swTableType^ tt = gcnew swTableType::swTableType();
+    //  String^ s = tt->GetProperty("KOFX1502-05-02", "QQQ");
+    //  System::Diagnostics::Debug::Assert(s == String::Empty);
+    //}
 
-    [TestMethod]
-    void TestRowNotExist() {
-      swTableType::swTableType^ tt = gcnew swTableType::swTableType();
-      String^ s = tt->GetProperty("QQQ", "MATID");
-      System::Diagnostics::Debug::Assert(s == String::Empty);
-    }
+    //[TestMethod]
+    //void TestRowNotExist() {
+    //  swTableType::swTableType^ tt = gcnew swTableType::swTableType();
+    //  String^ s = tt->GetProperty("QQQ", "MATID");
+    //  System::Diagnostics::Debug::Assert(s == String::Empty);
+    //}
 
-    [TestMethod]
-    void TestLoop() {
-      swTableType::swTableType^ tt = gcnew swTableType::swTableType();
-      String^ s = String::Empty;
-      for each (String^ x in tt->GetPartList()) {
-        s = tt->GetProperty(x, "MATID");
-      }
+    //[TestMethod]
+    //void TestLoop() {
+    //  swTableType::swTableType^ tt = gcnew swTableType::swTableType();
+    //  String^ s = String::Empty;
+    //  for each (String^ x in tt->GetPartList()) {
+    //    s = tt->GetProperty(x, "MATID");
+    //  }
 
-      System::Diagnostics::Debug::Print(s);
-      System::Diagnostics::Debug::Assert(s == "1271");
-    };
+    //  System::Diagnostics::Debug::Print(s);
+    //  System::Diagnostics::Debug::Assert(s == "1271");
+    //};
 
-    [TestMethod]
-    void TestDirect() {
-      swTableType::swTableType^ tt = gcnew swTableType::swTableType();
-      String^ s = String::Empty;
-      s = tt->GetProperty("KOFX1502-05-03", "DescriptION");
+    //[TestMethod]
+    //void TestDirect() {
+    //  swTableType::swTableType^ tt = gcnew swTableType::swTableType();
+    //  String^ s = String::Empty;
+    //  s = tt->GetProperty("KOFX1502-05-03", "DescriptION");
 
-      System::Diagnostics::Debug::Print(s);
-      System::Diagnostics::Debug::Assert(s == "PLATE");
-    }
+    //  System::Diagnostics::Debug::Print(s);
+    //  System::Diagnostics::Debug::Assert(s == "PLATE");
+    //}
 
-    [TestMethod]
-    void TestGetPart() {
-      swTableType::swTableType^ tt = gcnew swTableType::swTableType();
-      Part^ p = tt->GetPart("KOFX1502-05-02");
-      double l = p->Length;
-      System::Diagnostics::Debug::Assert(System::Math::Abs(l - 3.254) < .0005);
-      int i = p->OpID[1];
-      System::Diagnostics::Debug::Assert(i == 32);
-    }
+    //[TestMethod]
+    //void TestGetPart() {
+    //  swTableType::swTableType^ tt = gcnew swTableType::swTableType();
+    //  Part^ p = tt->GetPart("KOFX1502-05-02");
+    //  double l = p->Length;
+    //  System::Diagnostics::Debug::Assert(System::Math::Abs(l - 3.254) < .0005);
+    //  int i = p->OpID[1];
+    //  System::Diagnostics::Debug::Assert(i == 32);
+    //}
 
-    [TestMethod]
-    void TestGetPartNoSuchPart() {
-      // Checking for no exceptions.
-      swTableType::swTableType^ tt = gcnew swTableType::swTableType();
-      Part^ p = tt->GetPart("QQQQQQ");
-      System::Diagnostics::Debug::Assert(p->Length == 0.0f);
-    }
+    //[TestMethod]
+    //void TestGetPartNoSuchPart() {
+    //  // Checking for no exceptions.
+    //  swTableType::swTableType^ tt = gcnew swTableType::swTableType();
+    //  Part^ p = tt->GetPart("QQQQQQ");
+    //  System::Diagnostics::Debug::Assert(p->Length == 0.0f);
+    //}
   };
 }

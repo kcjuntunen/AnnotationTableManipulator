@@ -25,7 +25,6 @@ namespace swTableType {
 
   public ref class swTableType {
   private:
-    bool got_sw;
     SelectionMgr^ swSelMgr;
     //TableAnnotation^ swTableAnn;
     ITableAnnotation^ swTable;
@@ -33,6 +32,7 @@ namespace swTableType {
     //string_list_type slt;
     string^ part_column = "PART";
     string^ inc_column = "INCLUDE IN CUTLIST";
+    string^ master_hash;
     //array<string^, 2>^ part_table;
     string_list_type^ cols;
     string_list_type^ prts;
@@ -70,8 +70,8 @@ namespace swTableType {
     ISldWorks^ swApp;
   public:
 
-    swTableType();
-    swTableType(IModelDoc2^ md);
+    //swTableType();
+    swTableType(IModelDoc2^ md, string^ tablehash);
     ~swTableType();
     Part^ GetPart(string^ part);
     Part^ GetPart(int row);

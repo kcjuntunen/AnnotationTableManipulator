@@ -4,34 +4,8 @@
 #include "swTableType.h"
 
 namespace swTableType {
-  swTableType::swTableType() {
-    swApp = gcnew SldWorksClass;
-    cols = gcnew string_list_type();
-    prts = gcnew string_list_type();
-
-    if (!swApp)
-      got_sw = false;
-    else
-      got_sw = true;
-
-    if (got_sw) {
-      swApp->Visible = true;
-      part = swApp->IActiveDoc2;
-      swSelMgr = part->ISelectionManager;
-      if (part != nullptr && swSelMgr != nullptr) {
-        IBomFeature^ swBom = (IBomFeature^)swSelMgr->GetSelectedObject6(1, -1);
-        if (swBom != nullptr) {
-          fill_table(swBom);
-        }
-        else {
-          find_bom();
-        }
-      }
-    }
-  }
-
-  swTableType::swTableType(IModelDoc2^ md) {
-    got_sw = true; // Well, not really.
+  swTableType::swTableType(IModelDoc2^ md, string^ tablehash) {
+    master_hash = tablehash;
     cols = gcnew string_list_type();
     prts = gcnew string_list_type();
     part = md;
@@ -160,14 +134,14 @@ namespace swTableType {
   void swTableType::find_bom() {
     bool found = false;
     IFeature^ feature = (IFeature^)part->FirstFeature();
-    if (got_sw && part != nullptr) {
+    if (part != nullptr) {
       while (feature != nullptr) {
         if (feature->GetTypeName2()->ToUpper() == "BOMFEAT") {
           feature->Select2(false, -1);
           IBomFeature^ bom = (IBomFeature^)swSelMgr->GetSelectedObject6(1, -1);
           fill_table(bom);
           // TODO: This hardcoding is gonna have to go eventually.
-          if (identify_table(cols, "3D-C6-2B-6E-5B-D9-78-5D-DB-61-6F-78-6F-D8-B3-43")) {
+          if (identify_table(cols, master_hash)) {
             found = true;
             break;
           }
