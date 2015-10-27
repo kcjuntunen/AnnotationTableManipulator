@@ -55,7 +55,7 @@ public:
   void SetDeptID(string^ id);
   void SetUpdateCNC(string^ tf);
   void SetOpID(string^ id, int opNo);
-  void SetHash(string^ hexHash);
+  void SetHash(string^ intHash);
 
   string^ str();
 

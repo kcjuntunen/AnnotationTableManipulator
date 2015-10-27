@@ -71,9 +71,11 @@ void Part::SetOpID(string^ id, int opNo) {
   opid[opNo] = parse<unsigned short>(id);
 }
 
-void Part::SetHash(string^ hexhash) {
+void Part::SetHash(string^ intHash) {
   try {
-    hash = System::Convert::ToInt32(hexhash, 16);
+    int i = parse<int>(intHash);
+    string^ hexHash = string::Format("{0:X}", i);
+    hash = System::Convert::ToUInt32(hexHash, 16);
   }
   catch (System::Exception ^e) {
     throw gcnew System::Exception("SetHash() threw an exception.", e);

@@ -85,6 +85,7 @@ namespace swTableType {
     p->Comment = GetProperty(prt, "COMMENT");
     p->SetDeptID(GetProperty(prt, "DEPT"));
     p->SetUpdateCNC(GetProperty(prt, "UPDATE_CNC"));
+    p->SetHash(GetProperty(prt, "CRC32"));
     return p;
   }
 
