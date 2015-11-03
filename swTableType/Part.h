@@ -149,7 +149,7 @@ public:
 
   property unsigned short OpID[int] {
     unsigned short get(unsigned short ndx) {
-      if (ndx > 0 && ndx < 6)
+      if (ndx > -1 && ndx < 6)
         return opid[ndx];
       else
         return 0;
