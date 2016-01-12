@@ -132,10 +132,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <Reference Include="SolidWorks.Interop.sldworks">
-      <HintPath>..\..\..\..\..\..\..\Program Files\SolidWorks Corp\SolidWorks (3)\api\redist\CLR2\SolidWorks.Interop.sldworks.dll</HintPath>
-      <Private>true</Private>
-      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
-      <CopyLocalSatelliteAssemblies>true</CopyLocalSatelliteAssemblies>
+      <HintPath>..\x64\Release\SolidWorks.Interop.sldworks.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
