@@ -80,6 +80,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <LinkKeyFile>C:\Users\juntunenkc\Documents\Visual Studio 2013\Projects\swTableType\swTableType.kf.pfx</LinkKeyFile>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -132,18 +133,9 @@
   <ItemGroup>
     <Reference Include="SolidWorks.Interop.sldworks">
       <HintPath>..\..\..\..\..\..\..\Program Files\SolidWorks Corp\SolidWorks (3)\api\redist\CLR2\SolidWorks.Interop.sldworks.dll</HintPath>
-    </Reference>
-    <Reference Include="SolidWorks.Interop.swcommands">
-      <HintPath>..\..\..\..\..\..\..\Program Files\SolidWorks Corp\SolidWorks (3)\api\redist\CLR2\SolidWorks.Interop.swcommands.dll</HintPath>
-    </Reference>
-    <Reference Include="SolidWorks.Interop.swconst">
-      <HintPath>..\..\..\..\..\..\..\Program Files\SolidWorks Corp\SolidWorks (3)\api\redist\CLR2\SolidWorks.Interop.swconst.dll</HintPath>
-    </Reference>
-    <Reference Include="SolidWorks.Interop.swpublished">
-      <HintPath>..\..\..\..\..\..\..\Program Files\SolidWorks Corp\SolidWorks (3)\api\redist\CLR2\SolidWorks.Interop.swpublished.dll</HintPath>
-    </Reference>
-    <Reference Include="SolidWorksTools">
-      <HintPath>..\..\..\..\..\..\..\Program Files\SolidWorks Corp\SolidWorks (3)\DriveWorksXpress\solidworkstools.dll</HintPath>
+      <Private>true</Private>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+      <CopyLocalSatelliteAssemblies>true</CopyLocalSatelliteAssemblies>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
