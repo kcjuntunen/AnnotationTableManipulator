@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <!-- <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects> -->
     <ProjectGuid>{6EB63ECB-11B4-48A2-A679-D316896A2580}</ProjectGuid>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <Keyword>ManagedCProj</Keyword>
@@ -135,10 +135,18 @@
     <Reference Include="SolidWorks.Interop.sldworks">
       <HintPath>..\x64\Release\SolidWorks.Interop.sldworks.dll</HintPath>
     </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Security" />
-    <Reference Include="System.Xml" />
+    <Reference Include="System">
+      <HintPath>..\x64\Release\System.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data">
+      <HintPath>..\x64\Release\System.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security">
+      <HintPath>..\x64\Release\System.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml">
+      <HintPath>..\x64\Release\System.Xml.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Part.h" />
@@ -165,6 +173,9 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="app.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\..\..\..\..\Windows\Microsoft.NET\Framework\v4.0.30319\mscorlib.dll" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -5,9 +5,6 @@
 #pragma once
 
 namespace swTableType {
-  typedef System::String string;
-  typedef System::Collections::Generic::List<string^> string_list_type;
-  typedef System::Collections::Generic::List<int> int_list_type;
   typedef SolidWorks::Interop::sldworks::SelectionMgr SelectionMgr;
   typedef SolidWorks::Interop::sldworks::BomFeature BomFeature;
   typedef SolidWorks::Interop::sldworks::TableAnnotation TableAnnotation;
@@ -16,9 +13,13 @@ namespace swTableType {
   typedef SolidWorks::Interop::sldworks::ISldWorks ISldWorks;
   typedef SolidWorks::Interop::sldworks::ITableAnnotation ITableAnnotation;
   typedef SolidWorks::Interop::sldworks::IFeature IFeature;
-  typedef System::Collections::Generic::List<ITableAnnotation^> ita_list_type;
   typedef SolidWorks::Interop::sldworks::IBomTableAnnotation IBomTableAnnotation;
   typedef SolidWorks::Interop::sldworks::IBomFeature IBomFeature;
+  typedef System::Collections::Generic::List<ITableAnnotation^> ita_list_type;
+
+  typedef System::String string;
+  typedef System::Collections::Generic::List<string^> string_list_type;
+  typedef System::Collections::Generic::List<int> int_list_type;
   typedef System::Collections::Generic::Dictionary<string^, Part^>  Parts;
   typedef System::Security::Cryptography::MD5 MD5;
   typedef System::Byte byte;

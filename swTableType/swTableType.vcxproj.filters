@@ -55,4 +55,7 @@
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\..\..\..\..\Windows\Microsoft.NET\Framework\v4.0.30319\mscorlib.dll" />
+  </ItemGroup>
 </Project>
