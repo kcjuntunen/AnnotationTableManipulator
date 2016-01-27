@@ -83,7 +83,7 @@ namespace swTableType {
     p->SetEdgeLeftID(GetProperty(prt, "ELID"));
     p->SetEdgeRightID(GetProperty(prt, "ERID"));
     p->Comment = GetProperty(prt, "COMMENT");
-    p->SetDeptID(GetProperty(prt, "DEPT"));
+    p->SetDeptID(GetProperty(prt, "DEPTID"));
     p->SetUpdateCNC(GetProperty(prt, "UPDATE_CNC"));
     p->SetHash(GetProperty(prt, "CRC32"));
     return p;
