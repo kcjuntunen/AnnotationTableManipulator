@@ -11,7 +11,14 @@ namespace swTableType {
     part = md;
     swSelMgr = part->ISelectionManager;
     if (part != nullptr && swSelMgr != nullptr) {
-      IBomFeature^ swBom = (IBomFeature^)swSelMgr->GetSelectedObject6(1, -1);
+        IBomFeature^ swBom = nullptr;
+        
+        try {
+          swBom = (IBomFeature^)swSelMgr->GetSelectedObject6(1, -1);
+        } catch (System::Exception^ e) {
+            // Not an IBomFeature
+        }
+
       if (swBom != nullptr) {
         fill_table(swBom);
       }
@@ -84,7 +91,7 @@ namespace swTableType {
     p->SetEdgeRightID(GetProperty(prt, "ERID"));
     p->Comment = GetProperty(prt, "COMMENT");
     p->SetDeptID(GetProperty(prt, "DEPTID"));
-    p->SetUpdateCNC(GetProperty(prt, "UPDATE_CNC"));
+    p->SetUpdateCNC(GetProperty(prt, "UPDATE CNC")->ToUpper()->Contains("Y") ? "True" : "False");
     p->SetHash(GetProperty(prt, "CRC32"));
     return p;
   }
@@ -175,7 +182,7 @@ namespace swTableType {
     array<byte>^ ba = gcnew array<byte>(s->Length);
     int count = 0;
     for each (char c in s) {
-      ba[count] = s[count];
+      ba[count] = (byte)c;
       count++;
     }
     return ba;
