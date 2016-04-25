@@ -213,13 +213,23 @@ public:
 
   property string^ FileName {
     string^ get() {
-      return fi->Name->Split(' ', '.')[0];
+      if (fi != nullptr) {
+        return fi->Name->Split(' ', '.')[0];
+      }
+      else {
+        return string::Empty;
+      }
     }
   }
 
   property string^ FullPath {
     string^ get() {
-      return string::Format("{0}\\{1}", fi->Directory->FullName, FileName);
+      if (fi != nullptr) {
+        return string::Format("{0}\\{1}", fi->Directory->FullName, FileName);
+      }
+      else {
+        return string::Empty;
+      }
     }
   }
 

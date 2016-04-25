@@ -24,6 +24,9 @@ namespace swTableType {
   typedef System::Security::Cryptography::MD5 MD5;
   typedef System::Byte byte;
 
+  typedef System::IO::FileInfo FileInfo;
+  typedef System::Collections::Generic::List<FileInfo^> fi_list_type;
+
   public ref class swTableType {
   private:
     SelectionMgr^ swSelMgr;
@@ -40,6 +43,8 @@ namespace swTableType {
     int row_count = 0;
     int col_count = 0;
     bool initialated = false;
+    fi_list_type^ path_list;
+
     void fill_table(IBomFeature^ bom);
     void insert_part(int prt);
     void insert_parts();
@@ -70,6 +75,10 @@ namespace swTableType {
     Parts^ parts;
     ISldWorks^ swApp;
   public:
+
+    property fi_list_type^ PathList {
+      fi_list_type^ get() { return path_list; }
+    }
 
     //swTableType();
     swTableType(IModelDoc2^ md, string^ tablehash);

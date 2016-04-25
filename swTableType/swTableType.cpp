@@ -8,6 +8,7 @@ namespace swTableType {
     master_hash = tablehash;
     cols = gcnew string_list_type();
     prts = gcnew string_list_type();
+    path_list = gcnew fi_list_type();
     part = md;
     swSelMgr = part->ISelectionManager;
     if (part != nullptr && swSelMgr != nullptr) {
@@ -33,21 +34,39 @@ namespace swTableType {
   }
 
   void swTableType::fill_table(IBomFeature^ bom) {
+    string ^itno = string::Empty;
+    string ^ptno = string::Empty;
     cols->Clear();
     prts->Clear();
     swTable = (ITableAnnotation^)bom->IGetTableAnnotations(1);
     part->ClearSelection2(true);
+    
+    int count = 0;
 
     col_count = swTable->ColumnCount;
     row_count = swTable->RowCount;
     for (int i = 0; i < col_count; i++) {
       cols->Add(swTable->DisplayedText[0, i]);
     }
-
+        
+    Object^ ta = bom->GetTableAnnotations();
+    count = bom->GetTableAnnotationCount();
+    array<Object^>^ bomtaa = gcnew array<Object^>(count);
+    bomtaa = (array<Object^>^)bom->GetTableAnnotations();
+    SolidWorks::Interop::sldworks::BomTableAnnotation^ bta = (SolidWorks::Interop::sldworks::BomTableAnnotation^)bomtaa[0];
     int prtcol = get_column_by_name(part_column);
     for (int i = 0; i < row_count; i++) {
       prts->Add(swTable->DisplayedText[i, prtcol]);
+
+      array<string^>^ pathnames = gcnew array<string^>(count);
+      pathnames = (array<string^>^)bta->GetModelPathNames(i, itno, ptno);
+      if (pathnames != nullptr) {
+        for each (string ^v in pathnames) {
+          path_list->Add(gcnew FileInfo(v));
+        }
+      }
     }
+
     initialated = true;
   }
 
