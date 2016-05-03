@@ -4,8 +4,8 @@
 #include "swTableType.h"
 
 namespace swTableType {
-  swTableType::swTableType(IModelDoc2^ md, string^ tablehash) {
-    master_hash = tablehash;
+  swTableType::swTableType(IModelDoc2^ md, array<string^>^ tablehashes) {
+    master_hashes = tablehashes;
     cols = gcnew string_list_type();
     prts = gcnew string_list_type();
     path_list = gcnew fi_list_type();
@@ -168,7 +168,7 @@ namespace swTableType {
           IBomFeature^ bom = (IBomFeature^)swSelMgr->GetSelectedObject6(1, -1);
           fill_table(bom);
           // TODO: This hardcoding is gonna have to go eventually.
-          if (identify_table(cols, master_hash)) {
+          if (identify_table(cols, master_hashes)) {
             found = true;
             break;
           }
@@ -181,7 +181,8 @@ namespace swTableType {
     }
   }
 
-  bool swTableType::identify_table(string_list_type^ table, string^ tablehash) {
+  bool swTableType::identify_table(string_list_type^ table, array<string^>^ tablehashes) {
+    bool match = false;
     string^ str = string::Empty;
     array<string^>^ ss = gcnew array<string^>(table->Count);
     table->CopyTo(ss);
@@ -192,9 +193,12 @@ namespace swTableType {
 
     System::IO::Stream^ columns = gcnew System::IO::MemoryStream();
     columns->Write(System::Text::Encoding::UTF8->GetBytes(str), 0, str->Length - 1);
-    
+
     string^ hash = System::BitConverter::ToString(MD5::Create()->ComputeHash(to_byte_array(str)));
-    return hash == tablehash;
+    for each (string^ h in tablehashes) {
+      match |= hash == h;
+    }
+    return match;
   }
 
   array<byte>^ swTableType::to_byte_array(string^ s) {

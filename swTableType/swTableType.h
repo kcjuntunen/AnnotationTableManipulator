@@ -36,7 +36,7 @@ namespace swTableType {
     //string_list_type slt;
     string^ part_column = "PART";
     string^ inc_column = "INCLUDE IN CUTLIST";
-    string^ master_hash;
+    array<string^>^ master_hashes;
     //array<string^, 2>^ part_table;
     string_list_type^ cols;
     string_list_type^ prts;
@@ -61,7 +61,7 @@ namespace swTableType {
     Part^ return_part(int prt);
 
     void find_bom();
-    bool identify_table(string_list_type^ table, string^ tablehash);
+    bool identify_table(string_list_type^ table, array<string^>^ tablehashes);
     static array<byte>^ swTableType::to_byte_array(string^ s);
 
     property int ColumnCount {
@@ -81,7 +81,7 @@ namespace swTableType {
     }
 
     //swTableType();
-    swTableType(IModelDoc2^ md, string^ tablehash);
+    swTableType(IModelDoc2^ md, array<string^>^ tablehashes);
     ~swTableType();
     Part^ GetPart(string^ part);
     Part^ GetPart(int row);
