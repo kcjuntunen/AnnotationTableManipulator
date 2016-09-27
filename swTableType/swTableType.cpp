@@ -16,7 +16,7 @@ namespace swTableType {
         
         try {
           swBom = (IBomFeature^)swSelMgr->GetSelectedObject6(1, -1);
-        } catch (System::Exception^ e) {
+        } catch (System::Exception^) {
             // Not an IBomFeature
         }
 
@@ -56,8 +56,8 @@ namespace swTableType {
     SolidWorks::Interop::sldworks::BomTableAnnotation^ bta = (SolidWorks::Interop::sldworks::BomTableAnnotation^)bomtaa[0];
     int prtcol = get_column_by_name(part_column);
     for (int i = 0; i < row_count; i++) {
-      prts->Add(swTable->DisplayedText[i, prtcol]);
-
+      string^ dt = swTable->DisplayedText[i, prtcol];
+      prts->Add(dt);
       array<string^>^ pathnames = gcnew array<string^>(count);
       pathnames = (array<string^>^)bta->GetModelPathNames(i, itno, ptno);
       if (pathnames != nullptr) {
@@ -167,7 +167,6 @@ namespace swTableType {
           feature->Select2(false, -1);
           IBomFeature^ bom = (IBomFeature^)swSelMgr->GetSelectedObject6(1, -1);
           fill_table(bom);
-          // TODO: This hardcoding is gonna have to go eventually.
           if (identify_table(cols, master_hashes)) {
             found = true;
             break;
@@ -201,6 +200,17 @@ namespace swTableType {
     return match;
   }
 
+  bool swTableType::match_filter(string^ s, array<string^>^ filter_strings) {
+    string^ pn = s->Trim();
+    for each (string^ pattern in filter_strings) {
+      Regex ^r = gcnew Regex(pattern);
+      if (r->IsMatch(pn))
+        return true;
+    }
+
+    return false;
+  }
+
   array<byte>^ swTableType::to_byte_array(string^ s) {
     array<byte>^ ba = gcnew array<byte>(s->Length);
     int count = 0;
@@ -231,6 +241,16 @@ namespace swTableType {
     parts = gcnew Parts();
     for each (string^ s in GetPartList()) {
       parts->Add(s, GetPart(s));
+    }
+    return parts;
+  }
+
+  Parts^ swTableType::GetParts(array<string^>^ filter_strings) {
+    parts = gcnew Parts();
+    for each (string^ s in GetPartList()) {
+      if (match_filter(s, filter_strings) && !parts->ContainsKey(s)) {
+        parts->Add(s, GetPart(s));
+      }
     }
     return parts;
   }

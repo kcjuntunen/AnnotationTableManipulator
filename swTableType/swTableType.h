@@ -1,6 +1,7 @@
 // swTableType.h
 
 #using <mscorlib.dll>
+#using <system.dll>
 #include "Part.h"
 #pragma once
 
@@ -17,6 +18,7 @@ namespace swTableType {
   typedef SolidWorks::Interop::sldworks::IBomFeature IBomFeature;
   typedef System::Collections::Generic::List<ITableAnnotation^> ita_list_type;
 
+  typedef System::Text::RegularExpressions::Regex Regex;
   typedef System::String string;
   typedef System::Collections::Generic::List<string^> string_list_type;
   typedef System::Collections::Generic::List<int> int_list_type;
@@ -64,6 +66,8 @@ namespace swTableType {
     bool identify_table(string_list_type^ table, array<string^>^ tablehashes);
     static array<byte>^ swTableType::to_byte_array(string^ s);
 
+    bool match_filter(string^ s, array<string^>^ filter_strings);
+
     property int ColumnCount {
       int get() { return col_count; }
     }
@@ -89,6 +93,7 @@ namespace swTableType {
     string^ GetProperty(int row, string^ prop);
     string_list_type^ GetPartList();
     Parts^ GetParts();
+    Parts^ swTableType::GetParts(array<string^>^ filter_strings);
 
     property ISldWorks^ SldWorksApp {
       ISldWorks^ get() {
