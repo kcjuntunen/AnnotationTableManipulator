@@ -133,7 +133,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <Reference Include="SolidWorks.Interop.sldworks">
-      <HintPath>..\..\..\..\..\..\..\Program Files\SolidWorks Corp\SolidWorks\api\redist\SolidWorks.Interop.sldworks.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\Program Files\SolidWorks Corp\SolidWorks\api\redist\CLR2\SolidWorks.Interop.sldworks.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <HintPath>..\x64\Release\System.dll</HintPath>
